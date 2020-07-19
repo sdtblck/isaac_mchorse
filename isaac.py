@@ -67,11 +67,11 @@ async def on_message(message):
         # adds resource to the selected resources channel
         try:
             result = re.search('#([\w-]*)\s', message)
-            channelname = result.group(1)
+            channelname = result.group(1).strip()
             valid_channels = ['documentation', 'datascripts', 'data-sources', 'links', 'tfmesh', 'ethics-links',
                               'memes']
             if channelname not in valid_channels:
-                raise Exception('Channel not valid')
+                print(f'channel {channelname} invalid')
             msg = message.split(channelname)[1].strip()
             print(channelname)
             print(msg)
@@ -82,7 +82,7 @@ async def on_message(message):
             else:
                 print('no attachments')
         except:
-            message.channel.send("I'm sorry Dave, I'm afraid I can't do that")
+            await message.channel.send("I'm sorry Dave, I'm afraid I can't do that")
 
     if str(message.channel) != 'the-faraday-cage':
         print(message.channel)
