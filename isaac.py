@@ -3,6 +3,7 @@ import glob
 import discord
 import numpy as np
 import argparse
+import re
 
 parser = argparse.ArgumentParser(description='CLI for Isaac')
 
@@ -62,6 +63,27 @@ async def on_message(message):
             await server.edit(icon=icon)
     if 'bikeshedding' in message.content.lower():
         await message.channel.send(get_random_bikeshedding_msg())
+    if message.content.lower()[:12] == '!addresource':
+        # adds resource to the selected resources channel
+        try:
+            result = re.search('#([\w-]*)\s', message)
+            channelname = result.group(1)
+            valid_channels = ['documentation', 'datascripts', 'data-sources', 'links', 'tfmesh', 'ethics-links',
+                              'memes']
+            if channelname not in valid_channels:
+                raise Exception('Channel not valid')
+            msg = message.split(channelname)[1].strip()
+            print(channelname)
+            print(msg)
+            if message.attachments:
+                # append attachment url to your image
+                msg += " " + message.attachments[0].url
+                # message.attachments[0].url
+            else:
+                print('no attachments')
+        except:
+            message.channel.send("I'm sorry Dave, I'm afraid I can't do that")
+
     if str(message.channel) != 'the-faraday-cage':
         print(message.channel)
         return
