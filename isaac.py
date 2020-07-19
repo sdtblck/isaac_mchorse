@@ -65,30 +65,27 @@ async def on_message(message):
         await message.channel.send(get_random_bikeshedding_msg())
     if message.content.lower()[:12] == '!addresource':
         # adds resource to the selected resources channel
-        try:
-            # adds resource to the selected resources channel
-            result = re.match(r"^.*\<(.*)\>.*$", message)
-            channelid = result.group(1)
-            channelid = channelid.strip('#')
-            print(channelid)
-            valid_channels = ['documentation', 'datascripts', 'data-sources', 'links', 'tfmesh', 'ethics-links',
-                              'memes']
-            if channelid not in valid_channels:
-                print(f'{channelid} invalid')
-                pass
-            msg = message.split(channelid)[1].strip('>').strip()
-            print(channelid)
-            print(msg)
-            channel = client.get_channel(int(channelid))
-            if message.attachments:
-                # append attachment url to your image
-                msg += " " + message.attachments[0].url
-                # message.attachments[0].url
-            else:
-                print('no attachments')
-            await channel.send(msg)
-        except:
-            await message.channel.send("I'm sorry Dave, I'm afraid I can't do that")
+        # adds resource to the selected resources channel
+        result = re.match(r"^.*\<(.*)\>.*$", message)
+        channelid = result.group(1)
+        channelid = channelid.strip('#')
+        print(channelid)
+        valid_channels = ['documentation', 'datascripts', 'data-sources', 'links', 'tfmesh', 'ethics-links',
+                          'memes']
+        if channelid not in valid_channels:
+            print(f'{channelid} invalid')
+            pass
+        msg = message.split(channelid)[1].strip('>').strip()
+        print(channelid)
+        print(msg)
+        channel = client.get_channel(int(channelid))
+        if message.attachments:
+            # append attachment url to your image
+            msg += " " + message.attachments[0].url
+            # message.attachments[0].url
+        else:
+            print('no attachments')
+        await channel.send(msg)
 
     if str(message.channel) != 'the-faraday-cage':
         print(message.channel)
