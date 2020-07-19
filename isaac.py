@@ -66,21 +66,27 @@ async def on_message(message):
     if message.content.lower()[:12] == '!addresource':
         # adds resource to the selected resources channel
         try:
-            result = re.search('#([\w-]*)\s', message)
-            channelname = result.group(1).strip()
+            # adds resource to the selected resources channel
+            result = re.match(r"^.*\<(.*)\>.*$", message)
+            channelid = result.group(1)
+            channelid = channelid.strip('#')
+            print(channelid)
             valid_channels = ['documentation', 'datascripts', 'data-sources', 'links', 'tfmesh', 'ethics-links',
                               'memes']
-            if channelname not in valid_channels:
-                print(f'channel {channelname} invalid')
-            msg = message.split(channelname)[1].strip()
-            print(channelname)
+            if channelid not in valid_channels:
+                print(f'{channelid} invalid')
+                pass
+            msg = message.split(channelid)[1].strip('>').strip()
+            print(channelid)
             print(msg)
+            channel = client.get_channel(int(channelid))
             if message.attachments:
                 # append attachment url to your image
                 msg += " " + message.attachments[0].url
                 # message.attachments[0].url
             else:
                 print('no attachments')
+            await channel.send(msg)
         except:
             await message.channel.send("I'm sorry Dave, I'm afraid I can't do that")
 
